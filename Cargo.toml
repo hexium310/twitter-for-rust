@@ -1,0 +1,14 @@
+[package]
+name = "twitter"
+version = "0.1.0"
+authors = ["hexium310 <hexium310@gmail.com>"]
+
+[dependencies]
+rand = "0.3"
+base64 = "*"
+hyper = "*"
+hyper-native-tls = "*"
+serde_json = "*"
+rust-crypto = "^0.2"
+time = "*"
+url = "*"
