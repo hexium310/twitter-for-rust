@@ -46,7 +46,7 @@ let mut client = twitter::Client {
     consumer_secret: Some("Your ConsumerSecret".to_string()),
     access_token: Some("Your AccessToken".to_string()),
     access_token_secret: Some("Your AccessTokenSecret".to_string())
-}
+};
 ```
 
 ### 実際に使う場合
