@@ -46,12 +46,12 @@ pub struct Client {
 }
 
 impl Client {
-    pub fn new(ck: Option<String>, cs: Option<String>, at: Option<String>, ats: Option<String>) -> Client {
+    pub fn new(ck: Option<String>, cs: Option<String>) -> Client {
         Client {
             consumer_key: ck,
             consumer_secret: cs,
-            access_token: at,
-            access_token_secret: ats
+            access_token: None,
+            access_token_secret: None
         }
     }
 
