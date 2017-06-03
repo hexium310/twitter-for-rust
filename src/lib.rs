@@ -83,7 +83,7 @@ impl Client {
     }
 
     pub fn post(&self, endpoint: &str, param: BTreeMap<&str, &str>) -> serde_json::Value {
-        let url = format!("https://api.twitter.com/1.1/{}", endpoint);
+        let url = format!("https://api.twitter.com/1.1/{}.json", endpoint);
         let token = self.access_token.clone().unwrap();
         let token_secret = self.access_token_secret.clone().unwrap();
 
