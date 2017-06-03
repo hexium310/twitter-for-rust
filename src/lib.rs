@@ -13,7 +13,6 @@ use std::collections::{HashMap, BTreeMap};
 use crypto::sha1::Sha1;
 use crypto::hmac::Hmac;
 use crypto::mac::Mac;
-use hyper::Client;
 use hyper::header::{Headers, Authorization, ContentType};
 use hyper::mime::{Mime, TopLevel, SubLevel, Attr, Value};
 use hyper::net::HttpsConnector;
@@ -39,16 +38,16 @@ impl EncodeSet for StrictEncodeSet {
 }
 
 #[derive(Clone, Debug)]
-pub struct Oauth {
+pub struct Client {
     pub consumer_key: Option<String>,
     pub consumer_secret: Option<String>,
     pub access_token: Option<String>,
     pub access_token_secret: Option<String>
 }
 
-impl Oauth {
-    pub fn new(ck: Option<String>, cs: Option<String>, at: Option<String>, ats: Option<String>) -> Oauth {
-        Oauth {
+impl Client {
+    pub fn new(ck: Option<String>, cs: Option<String>, at: Option<String>, ats: Option<String>) -> Client {
+        Client {
             consumer_key: ck,
             consumer_secret: cs,
             access_token: at,
@@ -96,7 +95,7 @@ impl Oauth {
         let mut headers = Headers::new();
         headers.set(Authorization(header));
         headers.set(ContentType(Mime(TopLevel::Application, SubLevel::WwwFormUrlEncoded, vec![(Attr::Charset, Value::Utf8)])));
-        let client = Client::with_connector(HttpsConnector::new(NativeTlsClient::new().unwrap()));
+        let client = hyper::Client::with_connector(HttpsConnector::new(NativeTlsClient::new().unwrap()));
         let mut res = client.post(&url)
             .headers(headers)
             .body(&body)
@@ -123,7 +122,7 @@ impl Oauth {
 
         let mut headers = Headers::new();
         headers.set(Authorization(header));
-        let client = Client::with_connector(HttpsConnector::new(NativeTlsClient::new().unwrap()));
+        let client = hyper::Client::with_connector(HttpsConnector::new(NativeTlsClient::new().unwrap()));
         let mut res = client.get(&url)
             .headers(headers)
             .send()
@@ -143,7 +142,7 @@ fn encode(s: &str) -> String {
 }
 
 fn build_request(
-    oauth: &Oauth,
+    oauth: &Client,
     method: &str,
     url: &str,
     append_params: BTreeMap<&str, &str>,
@@ -205,7 +204,7 @@ fn build_body(params: &BTreeMap<&str, &str>) -> String {
 }
 
 fn get_token(url: &str, header_value: &str) -> String {
-    let client = Client::with_connector(HttpsConnector::new(NativeTlsClient::new().unwrap()));
+    let client = hyper::Client::with_connector(HttpsConnector::new(NativeTlsClient::new().unwrap()));
     let mut headers = Headers::new();
     headers.set(Authorization(header_value.to_string()));
     let mut res = client
@@ -220,7 +219,7 @@ fn get_token(url: &str, header_value: &str) -> String {
     body
 }
 
-fn get_request_token(oauth: &Oauth) -> Result<(String, String), String> {
+fn get_request_token(oauth: &Client) -> Result<(String, String), String> {
     let url = "https://api.twitter.com/oauth/request_token";
 
     let mut params = BTreeMap::new();
