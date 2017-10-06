@@ -11,8 +11,8 @@ git = "https://github.com/hexium310/twitter-for-rust"
 
 ### もしくはcargo-editを使用する場合は下記を実行します
 
-```
-cargo add twitter --git https://github.com/hexium310/twitter-for-rust
+``` sh
+$ cargo add twitter --git https://github.com/hexium310/twitter-for-rust
 ```
 
 ## Usage
