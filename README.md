@@ -4,7 +4,7 @@
 
 ### Cargo.tomlに下記を追加します
 
-```
+``` toml
 [dependencies.twitter]
 git = "https://github.com/hexium310/twitter-for-rust"
 ```
@@ -13,18 +13,17 @@ git = "https://github.com/hexium310/twitter-for-rust"
 
 ```
 cargo add twitter --git https://github.com/hexium310/twitter-for-rust
-
 ```
 
 ## Usage
 
-```
+``` rust
 extern crate twitter;
 ```
 
 ### OAuth認証してAccessTokenを取得する場合
 
-```
+``` rust
 let mut client = twitter::Client::new(
     Some("Your ConsumerKey".to_string()),
     Some("Your ConsumerSecret".to_string())
@@ -40,7 +39,7 @@ client.set_access_token(pin);
 
 ### すでにあるAccessTokenを使う場合
 
-```
+``` rust
 let mut client = twitter::Client {
     consumer_key: Some("Your ConsumerKey".to_string()),
     consumer_secret: Some("Your ConsumerSecret".to_string()),
@@ -51,7 +50,7 @@ let mut client = twitter::Client {
 
 ### 実際に使う場合
 
-```
+``` rust
 let mut param = std::collections::BTreeMap::<&str, &str>::new();
 param.isnert("status", "Your Tweet");
 
