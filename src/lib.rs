@@ -6,6 +6,7 @@ extern crate rand;
 extern crate serde_json;
 extern crate time;
 extern crate url;
+extern crate percent_encoding;
 
 use std::io::Read;
 use std::collections::{HashMap, BTreeMap};
@@ -19,23 +20,13 @@ use hyper::net::HttpsConnector;
 use hyper_native_tls::NativeTlsClient;
 use rand::Rng;
 use url::Url;
-use url::percent_encoding::{EncodeSet, percent_encode};
+use percent_encoding::{AsciiSet, CONTROLS, percent_encode};
 
-#[derive(Copy, Clone)]
-struct StrictEncodeSet;
-
-impl EncodeSet for StrictEncodeSet {
-    fn contains(&self, byte: u8) -> bool {
-        !((byte >= "0".as_bytes()[0] && byte <= "9".as_bytes()[0]) ||
-            (byte >= "a".as_bytes()[0] && byte <= "z".as_bytes()[0]) ||
-            (byte >= "A".as_bytes()[0] && byte <= "Z".as_bytes()[0]) ||
-            (byte == "-".as_bytes()[0]) ||
-            (byte == ".".as_bytes()[0]) ||
-            (byte == "_".as_bytes()[0]) ||
-            (byte == "~".as_bytes()[0])
-        )
-    }
-}
+const ENCODESET: &AsciiSet = &CONTROLS
+    .remove(b'-')
+    .remove(b'.')
+    .remove(b'_')
+    .remove(b'~');
 
 #[derive(Clone, Debug)]
 pub struct Client {
@@ -138,7 +129,7 @@ impl Client {
 }
 
 fn encode(s: &str) -> String {
-    percent_encode(s.as_bytes(), StrictEncodeSet).collect::<String>()
+    percent_encode(s.as_bytes(), ENCODESET).collect::<String>()
 }
 
 fn build_request(
